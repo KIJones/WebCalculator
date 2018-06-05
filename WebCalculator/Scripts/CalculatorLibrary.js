@@ -1,46 +1,43 @@
-﻿var txtInput;
-var txtResult;
-function initialize() {
-    for (var i = 0; i < 10; i++) {
-        document.getElementById('btn'+i).addEventListener('click', numberClick, false);
+﻿/// <reference path="_references.js" />
+(function () {
+    this.calculatorNamespace = this.calculatorNamespace || {};
+    var ns = this.calculatorNamespace;
+
+
+    function initialize() {
+        var calculator = new ns.Calculator();
+
+        $('button[id^="btnNumber"]').on('click', calculator.numberClick);
+        $('#btnPlus').on('click', calculator.plusClick);
+        $('#btnMinus').on('click', calculator.minusClick);
+        $('#btnClearEntry').on('click', calculator.clearEntry);
+        $('#btnClear').on('click', calculator.clear);
+        clear();
     }
-    txtInput = document.getElementById('txtInput');
-    txtResult = document.getElementById('txtResult');
-
-    document.getElementById('btnPlus').addEventListener('click', plusClick, false);
-    document.getElementById('btnMinus').addEventListener('click', minusClick, false);
-    document.getElementById('btnClearEntry').addEventListener('click', clearEntryClick, false);
-    document.getElementById('btnClear').addEventListener('click', clearClick, false);
-    txtInput.value = "0";
-    txtResult.value = "0";
-    //clear(); * does not seem to work
-    
-
-
-}
-
-function numberClick() {
-    txtInput.value = txtInput.value == '0' ? this.innerText : txtInput.value + this.innerText;
-    //txtInput.value = this.innerText;
-}
-
-function plusClick() {
-    txtResult.value = Number(txtResult.value) + Number(txtInput.value);
-    //txtInput.clearEntry();
-    txtInput.value = "0";
-}
-
-function minusClick(){
-    txtResult.value = Number(txtResult.value) - Number(txtInput.value);
-    //txtInput.clearEntry();
-    txtInput.value = "0";
-}
-
-function clearEntryClick() {
-    txtInput.value = "0";
-}
-
-function clearClick() {
-    txtInput.value = "0";
-    txtResult.value = "0";
-}
+    ns.Calculator = (function () {
+        function Calculator() {
+        }
+        Calculator.prototype.numberClick = function () {
+            $('#txtInput').val($('#txtInout').val() == '0' ?
+                $(this).text() : $('#txtInput').val() + $(this).text());
+        };
+        Calculator.prototype.plusClick = function () {
+            $('#txtResult').val(Number($('#txtResult').val()) +
+                Number($('#txtInput').val()));
+            Calculator.prototype.clearEntry();
+        };
+        Calculator.prototype.minusClick = function () {
+            $('#txtResult').val(Number($('#txtResult').val()) -
+                Number($('#txtInput').val()));
+            Calculator.prototype.clearEntry();
+        };
+        Calculator.prototype.clearEntry = function () {
+            $('#txtInput').val('0');
+        };
+        Calculator.prototype.clear = function () {
+            $('#txtInput').val('0');
+            $('#txtResult').val('0');
+        };
+        return Calculator;
+    }());
+})();
